@@ -1,13 +1,17 @@
 "use client";
-import { socialSignIn } from "@/app/actions/user";
+import { authClient } from "@/lib/auth-client"; // Import the client you created
 
 const GithubLogin = () => {
+  const handleLogin = async () => {
+    await authClient.signIn.social({
+      provider: "github",
+      callbackURL: "/", // Where to go after login
+    });
+  };
+
   return (
-    <button
-      onClick={async () => await socialSignIn("github")}
-      className="p-4 text-white bg-black"
-    >
-      Login with github
+    <button onClick={handleLogin} className="p-4 text-white bg-black">
+      Login with Github
     </button>
   );
 };
