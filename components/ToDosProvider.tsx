@@ -1,9 +1,9 @@
 "use client";
 import { createContext, ReactNode, useState } from "react";
 
-type contextType = { todos: ToDo[]; setTodos: (state: ToDo[]) => any };
+type contextType = { todos: ToDo[]; setTodos: (state: any[]) => any };
 
-const todosContext = createContext<contextType>({
+export const todosContext = createContext<contextType>({
   todos: [],
   setTodos: () => {},
 });
