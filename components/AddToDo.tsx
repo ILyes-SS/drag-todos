@@ -1,5 +1,6 @@
 "use client";
 
+import { insertTodo } from "@/app/actions/todos";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 
@@ -13,17 +14,42 @@ const AddToDo = ({ setTodos }: { setTodos: (state: any) => any }) => {
   } = useForm();
 
   async function onSubmit(formData: FieldValues) {
-    const newTodo: ToDo = {
-      id: crypto.randomUUID(),
+    // 1. Call server FIRST
+    const result = await insertTodo({
       status: "TO DO",
       title: formData["title"],
       description: formData["description"],
       checked: false,
-      userId: "",
-    };
-    setTodos((prev: ToDo[]) => [...prev, newTodo]);
-    reset();
-    setShowForm((prev) => !prev);
+    });
+    // 2. Check if it worked
+    if (result && result?.insertedId) {
+      const newTodo: ToDo = {
+        // 3. Use the REAL ID from the database
+        _id: result?.insertedId,
+        status: "TO DO",
+        title: formData["title"],
+        description: formData["description"],
+        checked: false,
+        userId: "", // Or result.userId if you return it
+      };
+      // 4. Update UI with the valid ID
+      setTodos((prev: ToDo[]) => [...prev, newTodo]);
+
+      reset();
+      setShowForm((prev) => !prev);
+    } else {
+      const newTodo: ToDo = {
+        _id: crypto.randomUUID(),
+        status: "TO DO",
+        title: formData["title"],
+        description: formData["description"],
+        checked: false,
+        userId: "",
+      };
+      setTodos((prev: ToDo[]) => [...prev, newTodo]);
+      reset();
+      setShowForm((prev) => !prev);
+    }
   }
 
   return (

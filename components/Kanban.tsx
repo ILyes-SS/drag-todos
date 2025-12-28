@@ -3,18 +3,22 @@ import { useContext } from "react";
 import Column from "./Column";
 import { todosContext } from "./ToDosProvider";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { updateTodo } from "@/app/actions/todos";
 
 const columns: Column[] = ["TO DO", "IN PROGRESS", "FINISHED"];
 
 const Kanban = () => {
   const { setTodos } = useContext(todosContext);
-  function handleDragEnd(event: DragEndEvent) {
+  async function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (!over) return;
 
     setTodos((prev: ToDo[]) =>
-      prev.map((t: ToDo) => (t.id == active.id ? { ...t, status: over.id } : t))
+      prev.map((t: ToDo) =>
+        t._id == active.id ? { ...t, status: over.id } : t
+      )
     );
+    await updateTodo(active.id as string, over.id as string);
   }
   return (
     <div className="flex flex-col items-center gap-4">

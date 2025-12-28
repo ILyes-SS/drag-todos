@@ -9,8 +9,6 @@ export const todosContext = createContext<contextType>({
   setTodos: () => {},
 });
 
-const localTodos = getItem("todos");
-
 const ToDosProvider = ({
   initialTodos,
   children,
@@ -19,7 +17,7 @@ const ToDosProvider = ({
   children: ReactNode;
 }) => {
   const [todos, setTodos] = useState(() => {
-    return getItem("todos") || initialTodos || [];
+    return initialTodos.length > 0 ? initialTodos : getItem("todos") || [];
   });
 
   useEffect(() => {

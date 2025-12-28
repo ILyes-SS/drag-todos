@@ -1,7 +1,7 @@
 type Column = "TO DO" | "IN PROGRESS" | "FINISHED";
 
 type ToDo = {
-  id: string;
+  _id: string;
   status: Column;
   title: string;
   description: string;

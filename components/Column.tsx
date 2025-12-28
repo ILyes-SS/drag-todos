@@ -30,7 +30,7 @@ const Column = ({ column }: { column: Column }) => {
         {column == "TO DO" && <AddToDo setTodos={setTodos} />}
         <div className="flex flex-col gap-2">
           {filteredTodos.map((todo) => {
-            return <ToDoCard key={todo.id} todo={todo} setTodos={setTodos} />;
+            return <ToDoCard key={todo._id} todo={todo} setTodos={setTodos} />;
           })}
         </div>
       </div>
