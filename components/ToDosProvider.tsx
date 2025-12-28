@@ -1,5 +1,6 @@
 "use client";
-import { createContext, ReactNode, useState } from "react";
+import { getItem, setItem } from "@/utils/localStorage";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
 type contextType = { todos: ToDo[]; setTodos: (state: any) => any };
 
@@ -15,7 +16,14 @@ const ToDosProvider = ({
   initialTodos: ToDo[];
   children: ReactNode;
 }) => {
-  const [todos, setTodos] = useState(initialTodos || []);
+  const [todos, setTodos] = useState(() => {
+    return initialTodos.length > 0 ? initialTodos : getItem("todos") || [];
+  });
+
+  useEffect(() => {
+    setItem("todos", todos);
+  }, [todos]);
+
   return (
     <todosContext.Provider value={{ todos, setTodos }}>
       {children}

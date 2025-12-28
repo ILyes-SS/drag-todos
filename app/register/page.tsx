@@ -1,6 +1,7 @@
 "use client";
 import { FieldValues, useForm } from "react-hook-form";
 import { signUp } from "../actions/user";
+import Link from "next/link";
 
 const Register = () => {
   const {
@@ -31,6 +32,9 @@ const Register = () => {
           submit
         </button>
       </form>
+      <Link href={"/login"} className="border bg-blue-400">
+        login
+      </Link>
     </div>
   );
 };

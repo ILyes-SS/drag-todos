@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteTodo, updateTodo } from "@/app/actions/todos";
 import { useDraggable } from "@dnd-kit/core";
 
 const ToDoCard = ({
@@ -10,15 +11,17 @@ const ToDoCard = ({
   setTodos: (state: any) => any;
 }) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: todo.id,
+    id: todo._id,
   });
-  const checkTodo = () => {
+  const checkTodo = async () => {
     setTodos((prev: ToDo[]) =>
-      prev.map((t) => (t.id != todo.id ? t : { ...t, checked: !t.checked }))
+      prev.map((t) => (t._id != todo._id ? t : { ...t, checked: !t.checked }))
     );
+    await updateTodo(todo._id, todo.checked);
   };
-  const deleteTodo = (id: string) => {
-    setTodos((prev: ToDo[]) => prev.filter((t) => t.id != id));
+  const deleteTodoFront = async (id: string) => {
+    setTodos((prev: ToDo[]) => prev.filter((t) => t._id != id));
+    await deleteTodo(id);
   };
 
   const style = transform
@@ -51,7 +54,7 @@ const ToDoCard = ({
 
       <button
         className="bg-red-500 cursor-pointer hover:bg-red-400 px-3 py-2 rounded-sm border text-white"
-        onClick={() => deleteTodo(todo.id)}
+        onClick={() => deleteTodoFront(todo._id)}
       >
         Delete
       </button>

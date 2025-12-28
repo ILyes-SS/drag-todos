@@ -2,6 +2,7 @@
 import { FieldValues, useForm } from "react-hook-form";
 import { signIn } from "../actions/user";
 import GithubLogin from "@/components/GithubLogin";
+import Link from "next/link";
 
 const login = () => {
   const {
@@ -27,6 +28,9 @@ const login = () => {
           submit
         </button>
       </form>
+      <Link className="border bg-blue-400" href={"/register"}>
+        Register
+      </Link>
     </div>
   );
 };
