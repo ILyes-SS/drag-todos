@@ -27,10 +27,10 @@ const AddToDo = ({ setTodos }: { setTodos: (state: any) => any }) => {
   }
 
   return (
-    <div>
+    <div className="w-full mb-3">
       <button
         onClick={() => setShowForm((prev) => !prev)}
-        className="px-5 py-3 border"
+        className="px-5 hover:bg-gray-200 cursor-pointer w-full text-xl rounded-md py-3 border"
       >
         +
       </button>
