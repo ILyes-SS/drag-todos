@@ -1,15 +1,25 @@
 "use server";
 
 import { auth } from "@/lib/auth";
+import { signupSchema, signupType } from "@/lib/validation";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { FieldValues } from "react-hook-form";
 
-export async function signUp(formData: FieldValues) {
-  const name = formData["email"] as string;
-  const email = formData["email"] as string;
-  const password = formData["password"] as string;
-  const confirmPassword = formData["confirmPassword"] as string;
+export async function signUp(formData: signupType) {
+  const safeData = signupSchema.safeParse(formData)
+  if (!safeData.success) {
+      let zodErrors = {};
+      
+        safeData.error.issues.forEach((issue) => {
+          zodErrors = { ...zodErrors, [issue.path[0]]: issue.message };
+          });
+        return { errors: zodErrors }
+  }
+  const name = safeData.data.email; 
+  const email = safeData.data.email;
+  const password = safeData.data.password;
+  const confirmPassword = safeData.data.confirmPassword;
 
   const result = await auth.api.signUpEmail({
     body: {
