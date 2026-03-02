@@ -21,3 +21,11 @@ export type serverErrors = {
         confirmPassword?: string;
     }
 }
+
+export const createTodoSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string().min(1, "Description is required"),
+  status: z.enum(["TO DO" , "IN PROGRESS" , "FINISHED"]),
+  checked: z.boolean(),
+});
+export type createTodoType = z.infer<typeof createTodoSchema>

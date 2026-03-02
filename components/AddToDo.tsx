@@ -20,9 +20,13 @@ const AddToDo = ({ setTodos }: { setTodos: (state: any) => any }) => {
       title: formData["title"],
       description: formData["description"],
       checked: false,
+      
     });
+    if(result?.success == false){
+      return
+    }
     // 2. Check if it worked
-    if (result && result?.insertedId) {
+    if (result &&  result?.insertedId) {
       const newTodo: ToDo = {
         // 3. Use the REAL ID from the database
         _id: result?.insertedId,

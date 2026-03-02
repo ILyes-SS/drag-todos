@@ -2,6 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import clientPromise from "@/lib/mongodb";
+import { createTodoSchema, createTodoType } from "@/lib/validation";
 import { ObjectId } from "mongodb";
 import { headers } from "next/headers";
 
@@ -32,7 +33,7 @@ export async function fetchTodos() {
   return { success: true, data: todos };
 }
 
-export async function insertTodo(todo: Omit<ToDo, "userId" | "_id">) {
+export async function insertTodo(todo: createTodoType) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -41,13 +42,18 @@ export async function insertTodo(todo: Omit<ToDo, "userId" | "_id">) {
   }
   const userId = session?.user.id;
 
+  const safeData = createTodoSchema.safeParse(todo)
+  if (!safeData.success) {
+    return { success: false };
+  }
+
   const client = await clientPromise;
   const db = client.db("drag-todos");
 
   const result = await db
     .collection("todos")
-    .insertOne({ ...todo, userId: userId });
-  return { ...todo, insertedId: result.insertedId.toString() };
+    .insertOne({ ...safeData.data, userId: userId });
+  return { ...safeData.data, insertedId: result.insertedId.toString() };
 }
 
 export async function updateTodo(_id: string, edited: boolean | string) {
