@@ -29,3 +29,12 @@ export const createTodoSchema = z.object({
   checked: z.boolean(),
 });
 export type createTodoType = z.infer<typeof createTodoSchema>
+
+export const localStorageSchema: z.ZodType<ToDo[]> = z.array(z.object({
+  _id: z.string(),
+  status: z.enum( ["TO DO", "FINISHED", "IN PROGRESS"]),
+    title: z.string(),
+    description: z.string(),
+    checked: z.boolean(),
+    userId: z.string(),
+})) 
